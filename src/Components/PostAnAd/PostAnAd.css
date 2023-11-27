@@ -1,0 +1,10 @@
+.postAdContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.error-message{
+    font-weight: bold;
+    color: rgb(217, 66, 66);
+}
