@@ -1,0 +1,13 @@
+ .copyRights{
+    display:flex;
+    justify-content: flex-end;
+    background-color: rgb(19, 65, 77);
+    padding:16px;
+  }
+  
+  .copyRights p{
+    margin: 0;
+    color:#ebeeef;
+  }
+
+  
