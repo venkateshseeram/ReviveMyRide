@@ -113,7 +113,9 @@ function PostAnAd() {
          {uploadError}
       </div>}
     <br/>
-
+ {
+  //place a back to home button
+ }
   </div> 
 
 )}

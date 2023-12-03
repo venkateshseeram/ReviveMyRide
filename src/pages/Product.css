@@ -1,6 +1,9 @@
 .btn button{
-    background-color: rgb(19, 65, 77);
+    background-color: rgb(220, 30, 30);
     color: white;
-    box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 4px rgba(220,30,30,0.8);
     border-radius: 4px;
+    border:none;
+    font-weight: bold;
+    padding: 8px 16px 8px 16px;
 }
