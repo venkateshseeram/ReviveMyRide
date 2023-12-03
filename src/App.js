@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {Routes, Route} from 'react-router-dom'
 import Home from './Components/Home'
 import Login from './Components/Login/Login'
 import Signup from './Components/SignUp/SignUp';
-import {UserSessionData} from './Components/Context/AuthContext';
 import PostAnAd from './Components/PostAnAd/PostAnAd';
+import Cart from './Components/Cart/Cart'
+import {UserSessionData} from './Components/Context/AuthContext'
 import './App.css'
 function App() {  
   const [user, setUser] = useState()
@@ -15,6 +16,7 @@ function App() {
           <Route path='/signup' Component={Signup}></Route>
           <Route path='/login' Component={Login}></Route>
           <Route path='/postAnAd' Component={PostAnAd}></Route>
+          <Route path='/cart' Component={Cart}></Route>
         </Routes>
         </UserSessionData.Provider>
   );

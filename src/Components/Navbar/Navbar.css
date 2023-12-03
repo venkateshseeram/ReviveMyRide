@@ -1,21 +1,22 @@
 nav{
-    display: flex;
-    justify-content: flex-end;
     width: 100%;
     color:white;
     min-height: 6vh;
-    background-color: rgb(21, 37, 47);
+    background-color: rgb(21, 42, 47);
+}
+.logo img{
+    width: 60px;
+    min-height: 6vh;
 }
 
 nav .nav-links{
-    width:20%;
     display: flex;
-    justify-content:space-evenly;
+    justify-content:space-between;
     align-items: center;
     list-style-type: none;
 }
 
-nav .nav-links > a{
+nav .nav-links a{
     text-decoration: none;
     color:white
 }
