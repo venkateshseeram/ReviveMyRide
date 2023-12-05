@@ -7,14 +7,51 @@ nav{
 .logo img{
     width: 60px;
     min-height: 6vh;
+    padding-right: 2vw;
 }
 
+.logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 nav .nav-links{
     display: flex;
+    flex-direction: row;
     justify-content:space-between;
     align-items: center;
     list-style-type: none;
 }
+
+.nav-links .logo{
+    margin-left: 1vw;
+}
+
+nav .non-logo-links{
+  padding-right: 1vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+nav .non-logo-links div{
+    padding-right: 1vw;
+}
+
+.logout button{
+    padding: auto;
+}
+:not([style="visibility: hidden"]) button{ 
+     background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit; 
+}
+
+
 
 nav .nav-links a{
     text-decoration: none;
@@ -23,4 +60,5 @@ nav .nav-links a{
 
 nav ul{
     margin: 0;
+    padding: 0.5vw;
 }
