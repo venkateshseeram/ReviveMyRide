@@ -25,15 +25,15 @@ function Cart() {
         querySnapshot.forEach((doc)=>{
           cartProductsData.push({...doc.data()})
         })
+        setLoading(true)
         if(cartProductsData.length === querySnapshot.docs.length)
         setCartProductsData(cartProductsData)
-        setLoading(true)
         }
       else
       navigate('/login')
   
       }) 
-  },[])
+  },[cartProductsData])
 
   return (
     <>
@@ -42,12 +42,12 @@ function Cart() {
      {loading? (
       <div className='cartProducts'>
       {
-        cartProductsData.length > 0 && (<CartProducts cartProductsData={cartProductsData}></CartProducts>)
+        cartProductsData.length > 0 ? (<CartProducts cartProductsData={cartProductsData}></CartProducts>):(<div>No products to be displayed for now! Please add some to cart from home page by clicking below to navigate.</div>)
       }
       </div>
       ):
         (<div>
-          <p>No products to be displayed for now! Please add some to cart from home page by clicking below to navigate.</p>
+          <p>Data is loading.. Please wait..</p>
       </div>)
       }
       </div>

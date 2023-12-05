@@ -3,9 +3,10 @@ import { UserSessionData } from '../Context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth} from '../../config/firebase';
-import {ShoppingCart} from 'phosphor-react'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import logo from '../../logo.png'
 import '../Navbar/Navbar.css'
+import { Badge } from '@mui/material';
 
 function Navbar() {
       const { user } = useContext(UserSessionData);
@@ -30,20 +31,31 @@ function Navbar() {
         <Link to='/'>
         <img src={logo}/>
         </Link>
+        <div>
+         <p style={{font:'bold',color:'white'}}>REVIVE MY RIDE</p>
+        </div>
       </div>
-      <div className='nav-links'>
-       {user? user.email: (<Link to ='/login'>Login</Link>)}
+      <div className='non-logo-links'>
+        <div>{user? user.email: (<Link to ='/login'>Login</Link>)}
+         </div>
+       <div className='logout'>
        {user && (
         <button onClick={logout}>
         Logout
         </button>
         )}
+        </div>  
+        <div>
        <button onClick={handleSellerPost}>Sell</button>
+       </div>
        <div className='cart'>
-       <Link to='/cart'>
-         <ShoppingCart size={36}/>
+         <Link to='/cart'>
+           <Badge badgeContent={0} color="primary">
+            <ShoppingCartIcon/>
+           </Badge> 
+          
          </Link> 
-         </div>  
+        </div>  
        </div>
       </ul>
     </nav>

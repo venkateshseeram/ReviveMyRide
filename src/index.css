@@ -7,8 +7,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#document > body{
-  min-height: 100vh;
+html{
+  height: 100%;
+}
+body, #root{
+  min-height: 100vh
+}
+
+#root{
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
 }
 
 *{
