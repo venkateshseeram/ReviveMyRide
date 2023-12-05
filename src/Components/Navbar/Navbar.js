@@ -32,7 +32,9 @@ function Navbar() {
         <img src={logo}/>
         </Link>
         <div>
-         <p style={{font:'bold',color:'white'}}>REVIVE MY RIDE</p>
+        <Link to='/'>
+         <button style={{font:'bold',color:'white'}}>REVIVE MY RIDE</button>
+         </Link>
         </div>
       </div>
       <div className='non-logo-links'>

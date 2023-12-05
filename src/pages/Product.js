@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import './Product.css'
 
 function Product(props) {
-  const{id, name, price,description, image} = props.data
+  const{id, name,description ,price, image} = props.data
   const handleAddToCart = ()=>{
     props.addToCart(props.data)
   }
