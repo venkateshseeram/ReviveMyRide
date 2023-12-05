@@ -9,7 +9,7 @@ import {collection, getDocs} from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom';
 import '../Cart/Cart.css'
 function Cart() {
-  const {user,setUser} = useContext(UserSessionData)
+  const {setUser} = useContext(UserSessionData)
   const [cartProductsData, setCartProductsData] = useState([])
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()

@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react'
+import React,{useContext} from 'react'
 import { UserSessionData } from '../Context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -8,7 +8,7 @@ import logo from '../../logo.png'
 import '../Navbar/Navbar.css'
 
 function Navbar() {
-      const { user , setUser} = useContext(UserSessionData);
+      const { user } = useContext(UserSessionData);
       const navigate = useNavigate();
       const logout= ()=> {
         signOut(auth).then(()=>{

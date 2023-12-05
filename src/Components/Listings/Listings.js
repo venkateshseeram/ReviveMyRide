@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { products } from '../../pages/products'
 import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import Product from '../../pages/Product'
 import '../Listings/Listings.css'
@@ -10,12 +9,12 @@ import { useNavigate } from 'react-router-dom';
 function Listings() {
     const navigate = useNavigate()
     const [products, setProducts] = useState([]);
-    const {user,setUser} = useContext(UserSessionData)
+    const {user} = useContext(UserSessionData)
     const [loading, setLoading] = useState(false)
     let updatedProductData;
     const addToCart= async(productData)=>{
+
       if(user){
-      console.log('clicked on add to cart', user.uid , 'Product info clicked on:', productData)
       updatedProductData = productData;
       updatedProductData.qty = 1;
       updatedProductData.TotalProductPrice = updatedProductData.qty *updatedProductData.price;
@@ -39,16 +38,18 @@ function Listings() {
     }
 
     useEffect(()=>{
+      setLoading(true)
       getProducts();
       setLoading(false)
     },[])
 
   return (
     <div className='listings'>
-       {loading?
-       products.map((item)=>
-           <Product key={item.id} data={item} addToCart={addToCart}></Product>
-           ) : <div>Data is loading please wait</div>}
+        { loading?
+       products.map((item)=> <Product key={item.id} data={item} addToCart={addToCart}></Product>
+       ) 
+       : <div>Data is loading please wait</div>
+    }
     </div>
   )
 }

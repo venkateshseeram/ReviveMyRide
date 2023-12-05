@@ -1,6 +1,6 @@
 import ballBearing from '../assets/thrust-ball-bearing.jpeg'
 import carBattery from '../assets/Car-battery.png'
-export const products = [
+export const productData = [
     {
         id: 1,
         name: "ball bearing",
