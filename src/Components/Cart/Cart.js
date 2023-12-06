@@ -47,7 +47,7 @@ function Cart() {
       </div>
       ):
         (<div>
-          <p>Data is loading.. Please wait..</p>
+          <p>Data is loading..</p>
       </div>)
       }
       </div>
