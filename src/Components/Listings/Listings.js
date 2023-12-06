@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc, getDoc } from "firebase/firestore";
 import Product from '../../pages/Product'
 import '../Listings/Listings.css'
 import { textDB } from '../../config/firebase'
@@ -15,8 +15,17 @@ function Listings() {
     const addToCart= async(productData)=>{
 
       if(user){
-      updatedProductData = productData;
-      updatedProductData.qty = 1;
+        updatedProductData = productData;
+        //getDoc
+        const docSnap= await getDoc(doc(textDB, 'Cart '+ user.uid, productData.id)) 
+        //if docSnap exists, then qty + 1 else qty = 1
+        if(docSnap.exists()){
+          updatedProductData.qty = docSnap.data().qty + 1;
+        }
+        else{
+        updatedProductData.qty = 1;
+        }
+        //set or update data regardless
       updatedProductData.TotalProductPrice = updatedProductData.qty *updatedProductData.price;
       //Add data to the cart and cart data to firebase to persist through out the pages or user session
       await setDoc(doc(textDB, 'Cart ' + user.uid, updatedProductData.id), updatedProductData);
