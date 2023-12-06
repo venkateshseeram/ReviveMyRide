@@ -1,20 +1,23 @@
 import React, { useContext } from 'react'
 import './Product.css'
+import { IndividualProductContext } from '../Components/Context/ProductContext'
+function Product({product, addToCart}) {
 
-function Product(props) {
-  const{id, name,description ,price, image} = props.data
+  const {setIndividualProduct} = useContext(IndividualProductContext)
+  
   const handleAddToCart = ()=>{
-    props.addToCart(props.data)
+    setIndividualProduct(product)
+    addToCart(product)
   }
  
  
   return (
     <div className='product'>
-      <img src={image}/>
+      <img src={product.image}/>
       <div className='productDescription'>
-        <p>{name}</p>
-        <p>${price}</p>
-        <p>{description}</p>
+        <p>{product.name}</p>
+        <p>${product.price}</p>
+        <p>{product.description}</p>
       </div>
       <div className='btn'>
         <button onClick={handleAddToCart}>Add To Cart</button>
