@@ -1,15 +1,17 @@
-import React , {useState, useContext}from 'react'
+import React , {useState, useContext,useEffect}from 'react'
 import { useNavigate } from 'react-router-dom';
 import { UserSessionData } from '../Context/AuthContext';
-import { imageDB, textDB} from '../../config/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { imageDB, textDB, auth} from '../../config/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { addDoc, collection } from 'firebase/firestore';
 import './PostAnAd.css'
-
+import Navbar from '../Navbar/Navbar';
+import Footer from '../Footer/Footer';
 
 function PostAnAd() {
 
-    const { user } = useContext(UserSessionData);
+      const {user,setUser} = useContext(UserSessionData)
       const [image, setImage] = useState(null)
       const [name, setName] = useState('')
       const [description, setDescription] = useState('')
@@ -21,6 +23,17 @@ function PostAnAd() {
       const [imageError, setImageError]= useState('')
 
   const navigate = useNavigate()
+
+  useEffect(()=>{
+    onAuthStateChanged(auth,(user)=>{
+      setUser(user)
+    })
+
+  },[setUser])
+
+  const handleImageUpload = (e)=>{
+    setImage(e.target.files[0])
+  }
 
   const handleSubmit = (e) =>{
     e.preventDefault();
@@ -67,7 +80,8 @@ function PostAnAd() {
   )}
 
   return (
-   
+    <>
+    <Navbar></Navbar>
     <div className="postAdContainer">
     <form autoComplete='off' onSubmit={(e)=> handleSubmit(e)}>
     <br/>
@@ -98,7 +112,7 @@ function PostAnAd() {
      <input type='text' name='Id' value={id} placeholder='Product ID' onChange={(e)=> setId(e.target.value)} required /><br/><hr/>
      <input type='text' name='Description' value={description} placeholder='Product Description' onChange={(e)=> setDescription(e.target.value)} required /><br/><hr/>
      <label>Product Image:</label><br/>
-     <input type='file' id='file' name='Image' accept='image/*' required /><br/><hr/>
+     <input type='file' id='file' name='Image' accept='image/*' onChange={handleImageUpload} required /><br/><hr/>
      <br/>
      {imageError && <div className='error-message'>
          {imageError}
@@ -117,7 +131,8 @@ function PostAnAd() {
   //place a back to home button
  }
   </div> 
-
+  <Footer></Footer>
+  </>
 )}
 
 export default PostAnAd
