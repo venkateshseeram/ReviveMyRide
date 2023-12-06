@@ -56,7 +56,7 @@ function IndividualCartProduct({cartProduct}) {
     <div className='productDetails'>
       <div className='productText title'>{state.name}</div>
       <div className='productText description'>{state.description}</div>
-      <div className='productText price'>{state.price}</div>
+      <div className='productText price'>${state.price}</div>
       <div className='productText quantity'>
        <div>
          <button onClick={decrementQuantity}> - </button>

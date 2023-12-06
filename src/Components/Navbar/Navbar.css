@@ -41,7 +41,8 @@ nav .non-logo-links div{
 .logout button{
     padding: auto;
 }
-:not([style="visibility: hidden"]) button{ 
+
+nav:not([style*="visibility: hidden"]) button{ 
      background: none;
 	color: inherit;
 	border: none;
