@@ -4,6 +4,8 @@ import { cartReducer } from '../../reducers/cartReducer'
 import { setDoc , doc, deleteDoc} from 'firebase/firestore'
 import { textDB } from '../../config/firebase'
 import { UserSessionData } from '../Context/AuthContext'
+import Button from '@mui/material/Button'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function IndividualCartProduct({cartProduct}) {
   const [loading, setLoading] = useState(true)
@@ -56,7 +58,7 @@ function IndividualCartProduct({cartProduct}) {
     <div className='productDetails'>
       <div className='productText title'>{state.name}</div>
       <div className='productText description'>{state.description}</div>
-      <div className='productText price'>{state.price}</div>
+      <div className='productText price'>${state.price}</div>
       <div className='productText quantity'>
        <div>
          <button onClick={decrementQuantity}> - </button>
@@ -67,9 +69,11 @@ function IndividualCartProduct({cartProduct}) {
        </div>
       </div>
       <div className='productText totalPrice'>
-         ${state.TotalProductPrice}
+        <p>Total Price: <span style={{color:'red'}}>${state.TotalProductPrice}</span></p>
       </div>
-      <button className="deleteProduct" onClick={deleteProductFromCart}>DELETE</button>
+      <Button variant="contained" startIcon={<DeleteIcon />} onClick={deleteProductFromCart} color='error'>
+        Delete
+      </Button>
     </div> 
   </div>
 </div>

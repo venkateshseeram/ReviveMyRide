@@ -8,6 +8,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import './PostAnAd.css'
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
+import { Button } from '@mui/material';
 
 function PostAnAd() {
 
@@ -59,7 +60,7 @@ function PostAnAd() {
       //adding document to firestore has been succesful
       setSuccessMessage('Product Data has been successfully uploaded')
       setName('')
-      setPrice()
+      setPrice(0)
       setId('')
       setCategory('')
       setDescription('')
@@ -68,7 +69,7 @@ function PostAnAd() {
       setImageError('')
       setTimeout(()=>{
         setSuccessMessage('')
-      }, 3000)
+      }, 5000)
 
     }).catch((error)=>{
        setUploadError(error.message)
@@ -83,13 +84,14 @@ function PostAnAd() {
     <>
     <Navbar></Navbar>
     <div className="postAdContainer">
-    <form autoComplete='off' onSubmit={(e)=> handleSubmit(e)}>
     <br/>
     {successMessage&& <div className='success-message'>
         {successMessage}
      </div>}
    <br/>
-     <input type='text' name='Name' value={name} placeholder='Product Name' onChange={(e)=> setName(e.target.value)} required /><br/><hr/>
+    <form autoComplete='off' onSubmit={(e)=> handleSubmit(e)}>
+     <input type='text' name='Name' value={name} placeholder='Product Name' onChange={(e)=> setName(e.target.value)} required />
+     <div className='productCategory'>
      <label>Product Category:</label><br/>
      <select name='Category' onChange={(e)=> setCategory(e.target.value)} required>
       <option>- None -</option>
@@ -108,19 +110,21 @@ function PostAnAd() {
       <option value="Valves">Valves</option>
       <option value="Wheels">Wheels</option>
      </select>
-     <input type='number' name='Price' value={price} placeholder='Product Price' onChange={(e)=> setPrice(e.target.value)} required /><br/><hr/>
-     <input type='text' name='Id' value={id} placeholder='Product ID' onChange={(e)=> setId(e.target.value)} required /><br/><hr/>
-     <input type='text' name='Description' value={description} placeholder='Product Description' onChange={(e)=> setDescription(e.target.value)} required /><br/><hr/>
+     </div>
+     <input type='number' name='Price' value={price} placeholder='Product Price' onChange={(e)=> setPrice(e.target.value)} required />
+     <input type='text' name='Id' value={id} placeholder='Product ID' onChange={(e)=> setId(e.target.value)} required />
+     <input type='text' name='Description' value={description} placeholder='Product Description' onChange={(e)=> setDescription(e.target.value)} required />
+     <div className='productImage'>
      <label>Product Image:</label><br/>
-     <input type='file' id='file' name='Image' accept='image/*' onChange={handleImageUpload} required /><br/><hr/>
+     <input type='file' id='file' name='Image' accept='image/*' onChange={handleImageUpload} required />
      <br/>
      {imageError && <div className='error-message'>
          {imageError}
       </div>}
-    <br/>
-    <button type='submit' className="uploadBtn">
+    </div>
+    <Button type='submit' className="uploadBtn" variant='contained'>
     Upload Data
-  </button>
+  </Button>
     </form>
     <br/>
      {uploadError && <div className='error-message'>
@@ -130,7 +134,7 @@ function PostAnAd() {
  {
   //place a back to home button
  }
-  </div> 
+  </div>
   <Footer></Footer>
   </>
 )}

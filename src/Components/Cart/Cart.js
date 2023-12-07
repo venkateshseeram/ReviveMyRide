@@ -39,6 +39,7 @@ function Cart() {
     <>
     <Navbar></Navbar>
      <div className='cartProductParentDiv'>
+     <button style={{float:'right'}}>Continue to Checkout</button>
      {loading? (
       <div className='cartProducts'>
       {

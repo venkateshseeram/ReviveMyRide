@@ -1,13 +1,21 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import './Product.css'
 import { IndividualProductContext } from '../Components/Context/ProductContext'
+import Button from '@mui/material/Button'
+
 function Product({product, addToCart}) {
 
   const {setIndividualProduct} = useContext(IndividualProductContext)
-  
+  const [addedToCart, setAddedToCart] = useState('Add to Cart')
+
   const handleAddToCart = ()=>{
     setIndividualProduct(product)
+    setAddedToCart('Added To Cart')
     addToCart(product)
+    setTimeout(()=>{
+      setAddedToCart('Add To Cart')
+    }, 500)
+
   }
  
  
@@ -20,7 +28,9 @@ function Product({product, addToCart}) {
         <p>{product.description}</p>
       </div>
       <div className='btn'>
-        <button onClick={handleAddToCart}>Add To Cart</button>
+       <Button variant='contained' onClick={handleAddToCart} color='success' size='medium' >
+        {addedToCart}
+      </Button>
       </div>
     </div>
   )
