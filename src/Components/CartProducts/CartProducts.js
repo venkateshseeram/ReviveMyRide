@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import IndividualCartProduct from '../IndividualCartProduct/IndividualCartProduct'
+import { CartContext } from '../Context/CartItemsContext'
 
-function CartProducts({cartProductsData}) {
-  return cartProductsData.map((cartProduct)=>
+function CartProducts() {
+  const {cartItems, setCartItems} = useContext(CartContext)
+  return cartItems.map((cartProduct)=>
  (<IndividualCartProduct key={cartProduct.id} cartProduct={cartProduct}></IndividualCartProduct>)
     )
 }

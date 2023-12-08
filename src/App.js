@@ -9,6 +9,7 @@ import {UserSessionData} from './Components/Context/AuthContext'
 import ListingsContext from './Components/Context/ListingsContext';
 import ProductContext from './Components/Context/ProductContext';
 import './App.css'
+import Checkout from './Components/Checkout/Checkout';
 function App() {  
   const [user, setUser] = useState()
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/login' Component={Login}></Route>
           <Route path='/postAnAd' Component={PostAnAd}></Route>
           <Route path='/cart' Component={Cart}></Route>
+          <Route path='/checkout' Component={Checkout}></Route>
         </Routes>
         </ProductContext>
         </ListingsContext> 
