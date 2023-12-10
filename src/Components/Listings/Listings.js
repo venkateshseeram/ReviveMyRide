@@ -5,11 +5,13 @@ import '../Listings/Listings.css'
 import { textDB } from '../../config/firebase'
 import { UserSessionData } from '../Context/AuthContext'
 import { useNavigate } from 'react-router-dom';
+import {AllListingsContext} from '../Context/ListingsContext';
 
 function Listings() {
     const navigate = useNavigate()
     const [products, setProducts] = useState([]);
     const {user} = useContext(UserSessionData)
+    const {allListings, setAllListings} = useContext(AllListingsContext)
     const [loading, setLoading] = useState(false)
     let updatedProductData;
     const addToCart= async(productData)=>{
@@ -41,6 +43,7 @@ function Listings() {
      products.push({...doc.data()})
       if(products.length === querySnapshot.docs.length){
         setProducts(products);
+        setAllListings(products)
         setLoading(true)
       }
      });
@@ -55,7 +58,7 @@ function Listings() {
   return (
     <div className='listings'>
         { loading?
-       products.map((item)=> <Product key={item.id} data={item} addToCart={addToCart}></Product>
+       products.map((item)=> <Product key={item.id} product={item} addToCart={addToCart}></Product>
        ) 
        : <div>Data is loading please wait</div>
     }

@@ -1,15 +1,20 @@
 import React, { useContext, useReducer, useState } from 'react'
 import '../IndividualCartProduct/IndividualCartProduct.css'
 import { cartReducer } from '../../reducers/cartReducer'
-import { setDoc , doc, deleteDoc} from 'firebase/firestore'
+import { setDoc , doc, deleteDoc, getDoc} from 'firebase/firestore'
 import { textDB } from '../../config/firebase'
 import { UserSessionData } from '../Context/AuthContext'
+import Button from '@mui/material/Button'
+import DeleteIcon from '@mui/icons-material/Delete';
+import { CartContext } from '../Context/CartItemsContext'
 
 function IndividualCartProduct({cartProduct}) {
   const [loading, setLoading] = useState(true)
   const initialState = cartProduct
   const [state, dispatch] = useReducer(cartReducer, initialState)
+  const {cartItems,setCartItems} = useContext(CartContext)
   const {user, setUser} = useContext(UserSessionData)
+  let [updatedCartItem, setUpdatedCartItem] = useState([])
 
   const decrementQuantity = ()=>{
     if(state.qty > 1){  
@@ -18,8 +23,7 @@ function IndividualCartProduct({cartProduct}) {
      let TotalProductPrice = state.price * qty;
      let updatedItems = {...state,qty, TotalProductPrice}
     const productRef = doc(textDB, 'Cart ' + user.uid, state.id)
-     setDoc(productRef, updatedItems);
-
+     setDoc(productRef, updatedItems)
     dispatch({type:'DECREASE_QTY', payload:cartProduct})
     }
     else{
@@ -32,9 +36,9 @@ function IndividualCartProduct({cartProduct}) {
      let qty = state.qty + 1;
      let TotalProductPrice = state.price * qty;
      let updatedItems = {...state,qty, TotalProductPrice}
-    const productRef = doc(textDB, 'Cart ' + user.uid, state.id)
+     const productRef = doc(textDB, 'Cart ' + user.uid, state.id)
      setDoc(productRef, updatedItems);
-
+    
     dispatch({type:'INCREASE_QTY', payload:cartProduct})
 
 }
@@ -56,7 +60,7 @@ function IndividualCartProduct({cartProduct}) {
     <div className='productDetails'>
       <div className='productText title'>{state.name}</div>
       <div className='productText description'>{state.description}</div>
-      <div className='productText price'>{state.price}</div>
+      <div className='productText price'>${state.price}</div>
       <div className='productText quantity'>
        <div>
          <button onClick={decrementQuantity}> - </button>
@@ -67,9 +71,11 @@ function IndividualCartProduct({cartProduct}) {
        </div>
       </div>
       <div className='productText totalPrice'>
-         ${state.TotalProductPrice}
+        <p>Total Price: <span style={{color:'red'}}>${state.TotalProductPrice}</span></p>
       </div>
-      <button className="deleteProduct" onClick={deleteProductFromCart}>DELETE</button>
+      <Button variant="contained" startIcon={<DeleteIcon />} onClick={deleteProductFromCart} color='error'>
+        Delete
+      </Button>
     </div> 
   </div>
 </div>

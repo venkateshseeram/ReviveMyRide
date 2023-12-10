@@ -1,89 +1,55 @@
 import React, {useState} from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import {  createUserWithEmailAndPassword  } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import Footer from '../Footer/Footer';
 import { auth } from '../../config/firebase';
+import { Link, useNavigate} from 'react-router-dom'
+import { Button } from '@mui/material';
 import './SignUp.css'
  
-const Signup = () => {
+const SignUp = () => {
     const navigate = useNavigate();
- 
-    const [email, setEmail] = useState('')
+    const [userName,setUserName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
- 
-    const onSubmit = async (e) => {
-      e.preventDefault()
-     
-      await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            navigate("/login")
-            // ...
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
-            // ..
-        });
- 
-   
+    const [user,setUser] = useState();
+
+    const registerUser = async(e)=>{
+        e.preventDefault();
+        await createUserWithEmailAndPassword(auth, email, password).then((userCreds)=>{
+            console.log(userCreds)
+            setUserName(userCreds.name);
+            setUser(userCreds);
+            navigate('/')
+        }).catch((error)=> alert(error.message));
+
     }
  
-  return (
-    <main >        
-        <section>
-            <div className='signUpFormParentDiv'>
-                <div className='signUpForm'>                                                                                            
-                    <form>     
-                       <header>Register Your Account</header>                                                                                       
-                        <div>
-                            <input
-                                type="email"
-                                label="Email address"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}  
-                                required                                    
-                                placeholder="Email address"                                
-                            />
-                        </div>
-
-                        <div>
-                            <input
-                                type="password"
-                                label="Create password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)} 
-                                required                                 
-                                placeholder="Password"              
-                            />
-                        </div>                                             
-                        <div className='signUpBtn'>
-                            <button
-                            type="submit" 
-                            onClick={onSubmit}                        
-                        >  
-                            Sign up                                
-                            </button>
-                        </div>
-                                                                     
-                    </form>
-                   
-                    <p>
-                        Already have an account?{' '}
-                        <NavLink to="/login" >
-                            Sign in
-                        </NavLink>
-                    </p>   
-                                  
-                </div>
-            <NavLink to='/' className='backToHomeCTA'>
-                Back To Home
-            </NavLink>     
+    return(<>
+         <Link to='/' className='backToHome'>
+          <Button size='medium'>Back To Home</Button>
+          </Link>
+          <div className='signUpFormParentDiv'>
+            <div className='signUpFormContainer'>
+                <form>
+                    <header>Register your Account</header>
+                    <div>   
+                        <input name='userName' placeholder='User Name' required onChange={(e)=> setUserName(e.target.value)}/>
+                    </div>
+                    <div>   
+                        <input name='email' type='email' placeholder='Email Address' required onChange={(e)=> setEmail(e.target.value)}/>
+                    </div>
+                    <div>
+                        <input name='password' type='password' placeholder='Password' required onChange={(e)=> setPassword(e.target.value)}/>
+                    </div>
+                    <div className='loginBtn'>
+                        <Button size='medium' variant='contained' color='success' type='submit' onClick={registerUser}>SIGNUP</Button>
+                    </div>
+                </form>
             </div>
-        </section>
-    </main>
-  )
+          </div>     
+        <Footer></Footer>
+           </>             
+    )
 }
  
-export default Signup
+export default SignUp
