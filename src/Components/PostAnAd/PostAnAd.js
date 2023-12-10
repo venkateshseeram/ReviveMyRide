@@ -38,7 +38,7 @@ function PostAnAd() {
 
   const handleSubmit = (e) =>{
     e.preventDefault();
-   const storageRef = ref(imageDB,/ProductImages/${image.name});
+   const storageRef = ref(imageDB,`/ProductImages/${image.name}`);
    const uploadTask = uploadBytesResumable(storageRef,image)
    uploadTask.on('state_changed', (snapshot)=>{
     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
