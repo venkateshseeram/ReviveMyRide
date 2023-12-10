@@ -25,7 +25,30 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    justify-items: center;
 }
+
+.backToHome button{
+    width:100%;
+   background-color: rgb(19, 65, 77); 
+   color:white;
+}
+
+.backToHome:hover{
+    background-color: rgb(19, 65, 77); 
+}
+
+.loginFormContainer{
+    margin-bottom: 4vh;
+    padding: 16px;
+    width: 50vw;
+    height:30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 
 .loginForm form ::placeholder{
     color: rgb(19, 65, 77);
@@ -41,12 +64,19 @@ form{
     justify-content: center;
     row-gap:3vh;
     padding: 2vw;
+    border: none;
+    border-radius: 0.1vw;
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+    display: grid;
+    grid-template-rows: auto;
+    justify-content: center;
+    row-gap:3vh;
+    padding: 2vw;
 }
 
 form input{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
-
 
 header{
     font-weight: bold;

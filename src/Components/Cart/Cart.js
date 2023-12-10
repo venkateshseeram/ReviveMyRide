@@ -7,11 +7,15 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { auth, textDB } from '../../config/firebase'
 import {collection, getDocs} from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import '../Cart/Cart.css'
+import { CartContext } from '../Context/CartItemsContext';
+
 function Cart() {
-  const {setUser} = useContext(UserSessionData)
-  const [cartProductsData, setCartProductsData] = useState([])
+  const {user,setUser} = useContext(UserSessionData)
+  let [cartProductsData, setCartProductsData] = useState([])
   const [loading, setLoading] = useState(false)
+  const {cartItems,setCartItems} = useContext(CartContext)
   const navigate = useNavigate()
   useEffect(()=>{
     onAuthStateChanged(auth,async(user)=>{
@@ -20,14 +24,7 @@ function Cart() {
         /*
   Retrieve all products associated with the cart + userID , to be used 
   */   
-        const querySnapshot = await getDocs(collection(textDB, "Cart "+ user.uid ));
-
-        querySnapshot.forEach((doc)=>{
-          cartProductsData.push({...doc.data()})
-        })
-        if(cartProductsData.length === querySnapshot.docs.length)
-        setCartProductsData(cartProductsData)
-        setLoading(true)
+      retreiveCartProducts(user)
         }
       else
       navigate('/login')
@@ -35,19 +32,39 @@ function Cart() {
       }) 
   },[])
 
+  const retreiveCartProducts = async(user) =>{
+    cartProductsData = [];
+    const querySnapshot = await getDocs(collection(textDB, "Cart "+ user.uid ));
+
+    querySnapshot.forEach((doc)=>{
+      cartProductsData.push({...doc.data()})
+    })
+    setLoading(true)
+    if(cartProductsData.length === querySnapshot.docs.length)
+    setCartProductsData(cartProductsData)
+    setCartItems(cartProductsData)
+  }
+
+  const navigateToCheckout = async() =>{
+    //get products when user clicks on checkout 
+    await retreiveCartProducts(user)
+    navigate('/checkout')
+  }
+
   return (
     <>
     <Navbar></Navbar>
      <div className='cartProductParentDiv'>
+     <Button id='continueToCheckout' color='success' variant='contained' onClick={navigateToCheckout}>Continue to Checkout</Button>
      {loading? (
       <div className='cartProducts'>
       {
-        cartProductsData.length > 0 && (<CartProducts cartProductsData={cartProductsData}></CartProducts>)
+        cartItems.length > 0 ? (<CartProducts></CartProducts>):(<div>No products to be displayed for now! Please add some to cart from home page by clicking below to navigate.</div>)
       }
       </div>
       ):
         (<div>
-          <p>No products to be displayed for now! Please add some to cart from home page by clicking below to navigate.</p>
+          <p>Data is loading..</p>
       </div>)
       }
       </div>
