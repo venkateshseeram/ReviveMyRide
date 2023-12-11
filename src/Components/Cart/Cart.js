@@ -55,16 +55,16 @@ function Cart() {
     <>
     <Navbar></Navbar>
      <div className='cartProductParentDiv'>
-     <Button id='continueToCheckout' color='success' variant='contained' onClick={navigateToCheckout}>Continue to Checkout</Button>
+     { cartItems.length > 0 && <Button id='continueToCheckout' color='success' variant='contained' onClick={navigateToCheckout}>Continue to Checkout</Button>}
      {loading? (
       <div className='cartProducts'>
       {
-        cartItems.length > 0 ? (<CartProducts></CartProducts>):(<div>No products to be displayed for now! Please add some to cart from home page by clicking below to navigate.</div>)
+        cartItems.length > 0 ? (<CartProducts></CartProducts>):(<div>No products to be displayed for now! Please add some to cart from home page by clicking on the logo</div>)
       }
       </div>
       ):
         (<div>
-          <p>Data is loading..</p>
+          <p>...Data is loading..Please wait..</p>
       </div>)
       }
       </div>
