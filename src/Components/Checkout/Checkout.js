@@ -13,23 +13,20 @@ import { setDoc , doc, Timestamp, getDocs, collection, query, orderBy} from 'fir
 function Checkout() {
     const {cartItems, setCartItems} = useContext(CartContext)
     const {user, setUser} = useContext(UserSessionData)
-    const [email, setEmail] = useState('')
     const navigate = useNavigate()
-    const [isAccordionActive, setIsAccordionActive] = useState(false);
     let [cartPrice, setCartPrice] = useState(0)
-    let cartData= cartItems;
     let [state, setState] = useState('')
     let [zipCode, setZipCode] = useState('')
     let [streetAdress, setStreetAddress] = useState('')
     let [paymentType, setPaymentType] = useState('')
+    let cartProductsData;
+    let [loading, setLoading] = useState(false)
   
   useEffect(()=>{
-    console.log('In use effect')
     onAuthStateChanged(auth,(user)=>{
       setUser(user)
-      console.log('In effect',user)
+      retreiveCartProducts(user)
     })
-    cartData = cartItems;
     if(user === null){
       navigate('/login')
     }
@@ -41,6 +38,18 @@ function Checkout() {
      
     }
   },[setUser])
+
+  const retreiveCartProducts = async(user) =>{
+    cartProductsData = [];
+    const querySnapshot = await getDocs(collection(textDB, "Cart "+ user.uid ));
+
+    querySnapshot.forEach((doc)=>{
+      cartProductsData.push({...doc.data()})
+    })
+    setLoading(true)
+    if(cartProductsData.length === querySnapshot.docs.length)
+    setCartItems(cartProductsData)
+  }
 
   const handlePlaceOrder = async(event) =>{
     event.preventDefault()
@@ -83,8 +92,8 @@ function Checkout() {
     <form className='payment-form' onSubmit={(e)=>handlePlaceOrder(e)}>
       <div className="grid-item order-summary">
          <header>Order Summary</header>
-         {cartData.length > 0 ? 
-          (cartData.map((cartItem)=>
+        {loading? (cartItems.length > 0 ? 
+          (cartItems.map((cartItem)=>
            (<div className='cartItemContainer' key={cartItem.id}>
                <div id='cartItemImage'>
                  <img src={cartItem.image} />
@@ -104,7 +113,12 @@ function Checkout() {
                </div>
            </div>)
           )) :
-           (<div> !!No products to be displayed!!</div>)}
+           (<div> !!No products to be displayed!!</div>)
+        ):
+        
+        (<div>...Data is loading.. please wait...</div>)}
+      
+
           <div className='edit-order' style={{padding:'1vw'}}>
            <Button size='medium' color='error' variant='contained' onClick={()=>{navigate('/cart')}}>Edit Order</Button>
           </div>
