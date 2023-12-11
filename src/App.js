@@ -9,7 +9,9 @@ import {UserSessionData} from './Components/Context/AuthContext'
 import ListingsContext from './Components/Context/ListingsContext';
 import ProductContext from './Components/Context/ProductContext';
 import Checkout from './Components/Checkout/Checkout';
+import UserProfile from './Components/UserProfile/UserProfile';
 import './App.css'
+import OrderConfirmation from './Components/OrderConfirmation/OrderConfirmation';
 function App() {  
   const [user, setUser] = useState()
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path='/postAnAd' Component={PostAnAd}></Route>
           <Route path='/cart' Component={Cart}></Route>
           <Route path='/checkout' Component={Checkout}></Route>
+          <Route path='/profile' Component={UserProfile}></Route>
+          <Route path='/orderConfirmation' Component={OrderConfirmation}></Route>
         </Routes>
         </ProductContext>
         </ListingsContext> 

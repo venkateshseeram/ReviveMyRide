@@ -7,6 +7,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import logo from '../../logo.png'
 import '../Navbar/Navbar.css'
 import { Badge } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 
 function Navbar() {
       const { user } = useContext(UserSessionData);
@@ -38,8 +39,9 @@ function Navbar() {
         </div>
       </div>
       <div className='non-logo-links'>
-        <div>{user? user.email: (<Link to ='/login'>Login</Link>)}
-         </div>
+       <div>
+       {user? ( <Link to='/profile'><PersonIcon/> </Link> ): (<Link to ='/login'>Login</Link>)}
+       </div>
        <div className='logout'>
        {user && (
         <button onClick={logout}>
