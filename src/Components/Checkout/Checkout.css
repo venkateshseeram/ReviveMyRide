@@ -1,4 +1,4 @@
-.grid-container {
+  .grid-container {
     display: grid;
     grid-auto-rows: 10vh auto auto 25vh;
     padding: 10px;
@@ -91,5 +91,4 @@
 .inputData{
     border: none;
   }
-  
   

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect,useState } from 'react'
 import { CartContext } from '../Context/CartItemsContext'
 import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
@@ -8,7 +8,8 @@ import { Button } from '@mui/material'
 import './Checkout.css'
 import { UserSessionData } from '../Context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { setDoc , doc, Timestamp, getDocs, collection, query, orderBy} from 'firebase/firestore'
+import { setDoc , doc, Timestamp, getDocs, collection, writeBatch} from 'firebase/firestore'
+import { PaymentElement } from '@stripe/react-stripe-js'
 
 function Checkout() {
     const {cartItems, setCartItems} = useContext(CartContext)
@@ -39,6 +40,8 @@ function Checkout() {
     }
   },[setUser])
 
+
+/* -----------Call to retreive cart products to be displayed on checkout page-------*/
   const retreiveCartProducts = async(user) =>{
     cartProductsData = [];
     const querySnapshot = await getDocs(collection(textDB, "Cart "+ user.uid ));
@@ -51,6 +54,7 @@ function Checkout() {
     setCartItems(cartProductsData)
   }
 
+  /* ---On place order , add the cart items ordered to Orders collection, delete items from Cart ------*/
   const handlePlaceOrder = async(event) =>{
     event.preventDefault()
     let currentDate = Timestamp.fromDate(new Date())
@@ -75,6 +79,18 @@ function Checkout() {
         alert('....Order has been succesfully placed...')
       }, 3000)
 
+      //Delete cart items from the user's cart using batch writes
+      const batch = writeBatch(textDB);
+      const cartSnapshot = await getDocs(collection(textDB, "Cart "+ user.uid ));
+
+      cartSnapshot.forEach((doc)=>{
+        batch.delete(doc.ref);
+    })
+      batch.commit().then(()=>{
+        console.log("deleted the cart items")
+      }).catch((error) => alert(error.message));
+
+      //Wait for 3 seconds before navigating to Order Confirmation Page
       setTimeout(()=>{
         navigate('/orderConfirmation')
       }, 3000)
@@ -142,10 +158,10 @@ function Checkout() {
         <p style={{color:'red'}}>Balance Due : ${cartPrice}</p>
         <div className='payment-type'>
           <header>Please select your prefered Payment Type:</header>
-          <fieldset className='inputData paymentInfo'>
-    		  <input type="radio" id="COD" name="payment" value='Cash On Delivery' onChange={(e)=> setPaymentType(e.target.value)} required/> Cash On Delivery
-          <input type="radio" id="Stripe" name="payment" value='Stripe' onChange={(e)=> setPaymentType(e.target.value)}/> Stripe Payment
-          </fieldset>
+          {
+            // <PaymentElement />
+          }
+         <button>Submit</button>
          </div>
         </div>
       <div className="grid-item place-order">

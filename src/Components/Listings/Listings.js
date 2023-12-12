@@ -1,19 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { collection, getDocs, setDoc, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc, getDoc , getAggregateFromServer,sum} from "firebase/firestore";
 import Product from '../../pages/Product'
 import '../Listings/Listings.css'
 import { textDB } from '../../config/firebase'
 import { UserSessionData } from '../Context/AuthContext'
 import { useNavigate } from 'react-router-dom';
 import {AllListingsContext} from '../Context/ListingsContext';
+import { CartContext } from '../Context/CartItemsContext';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../config/firebase';
 
 function Listings() {
     const navigate = useNavigate()
     const [products, setProducts] = useState([]);
-    const {user} = useContext(UserSessionData)
+    const {user, setUser} = useContext(UserSessionData)
     const {allListings, setAllListings} = useContext(AllListingsContext)
-    const [loading, setLoading] = useState(false)
-    let updatedProductData;
+    const [loading, setLoading] = useState(false);
+   let {cartLength, setCartLength} = useContext(CartContext);
+
+    let updatedProductData, updatedCartLength;
     const addToCart= async(productData)=>{
 
       if(user){
@@ -31,6 +36,16 @@ function Listings() {
       updatedProductData.TotalProductPrice = updatedProductData.qty *updatedProductData.price;
       //Add data to the cart and cart data to firebase to persist through out the pages or user session
       await setDoc(doc(textDB, 'Cart ' + user.uid, updatedProductData.id), updatedProductData);
+
+      // const cartSnapshot = await getDocs(collection(textDB, 'Cart '+ user.uid));
+      // console.log(cartSnapshot.docs())
+      const coll = collection(textDB, 'Cart '+ user.uid);
+      const snapshot = await getAggregateFromServer(coll, {
+              cartLength: sum('qty')
+      });
+      setCartLength(snapshot.data().cartLength)
+      console.log('totalPopulation: ', snapshot.data().cartLength);
+
       }
     else
       navigate('/login') 
@@ -50,6 +65,9 @@ function Listings() {
     }
 
     useEffect(()=>{
+      onAuthStateChanged(auth,(user)=>{
+        setUser(user)
+      })
       setLoading(true)
       getProducts();
       setLoading(false)

@@ -20,18 +20,17 @@ function OrderConfirmation() {
   const getOrderData = async() =>{
     try{ 
       //get latest doc from the orders and for the order + user.uid i.e. 1st doc when sorted by desc order
-      console.log(user.uid)
       setLoading(true)
      const ordersRef = collection(textDB,'Orders '+ user.uid)
      const q = query(ordersRef, orderBy('OrderCreationDate','desc'))
       let orderDataSnapshot = await getDocs(q)
-      latestOrder = orderDataSnapshot.docs[0].data()
-      setLatestOrder(orderDataSnapshot.docs[0].data())
+      latestOrder = orderDataSnapshot.docs[0].data().Products
+      setLatestOrder(latestOrder)
      }
 
-     catch{
-      console.log('errorrr')
-     }
+     catch(error){
+      console.log(error.message)
+   }
 
   }
      
@@ -41,8 +40,8 @@ function OrderConfirmation() {
     <Navbar></Navbar>
     <div>
      <header>Your Order Item Details</header>
-      {loading? (latestOrder.Products.length > 0 ? 
-      (latestOrder.Products.map((cartItem)=>
+      {loading? (latestOrder.length > 0 ? 
+      (latestOrder.map((cartItem)=>
        (<div className='cartItemContainer' key={cartItem.id}>
            <div id='cartItemImage'>
              <img src={cartItem.image} />

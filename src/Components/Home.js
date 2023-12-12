@@ -7,12 +7,12 @@ import { auth } from '../config/firebase'
 import Listings from './Listings/Listings'
 
 function Home() {
-  const {user,setUser} = useContext(UserSessionData)
-  useEffect(()=>{
-    onAuthStateChanged(auth,(user)=>{
-      setUser(user)
-    })
-  },[setUser])
+  // const {user,setUser} = useContext(UserSessionData)
+  // useEffect(()=>{
+  //   onAuthStateChanged(auth,(user)=>{
+  //     setUser(user)
+  //   })
+  // },[setUser])
  
   return (
     <>

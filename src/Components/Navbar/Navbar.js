@@ -1,19 +1,28 @@
-import React,{useContext} from 'react'
+import React,{useContext, useEffect} from 'react'
 import { UserSessionData } from '../Context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth} from '../../config/firebase';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import logo from '../../logo.png'
 import '../Navbar/Navbar.css'
 import { Badge } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
+import { CartContext} from '../Context/CartItemsContext';
 
 function Navbar() {
-      const { user } = useContext(UserSessionData);
+      const { user , setUser} = useContext(UserSessionData);
+      const {cartLength,setCartLength} = useContext(CartContext)
       const navigate = useNavigate();
-      const logout= ()=> {
-        signOut(auth).then(()=>{
+
+      useEffect(()=>{
+        onAuthStateChanged(auth,(user)=>{
+          setUser(user)       
+      })
+      },[])
+
+      const logout= async()=> {
+       await signOut(auth).then(()=>{
           navigate("/")
         }).catch((error)=>{
           alert(error)
@@ -54,7 +63,7 @@ function Navbar() {
        </div>
        <div className='cart'>
          <Link to='/cart'>
-           <Badge badgeContent={0} color="primary">
+          <Badge badgeContent={user ?cartLength : 0} color="primary" showZero>
             <ShoppingCartIcon/>
            </Badge> 
           

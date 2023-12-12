@@ -5,19 +5,20 @@ import Login from './Components/Login/Login'
 import Signup from './Components/SignUp/SignUp';
 import PostAnAd from './Components/PostAnAd/PostAnAd';
 import Cart from './Components/Cart/Cart'
-import {UserSessionData} from './Components/Context/AuthContext'
+import AuthContext from './Components/Context/AuthContext'
 import ListingsContext from './Components/Context/ListingsContext';
 import ProductContext from './Components/Context/ProductContext';
+import CartItemsContext from './Components/Context/CartItemsContext';
 import Checkout from './Components/Checkout/Checkout';
 import UserProfile from './Components/UserProfile/UserProfile';
 import './App.css'
 import OrderConfirmation from './Components/OrderConfirmation/OrderConfirmation';
 function App() {  
-  const [user, setUser] = useState()
   return (
-      <UserSessionData.Provider value={{user,setUser}}>
+      <AuthContext>
       <ListingsContext>
       <ProductContext>
+      <CartItemsContext>
         <Routes>
           <Route path='/' Component={Home}></Route>
           <Route path='/signup' Component={Signup}></Route>
@@ -28,9 +29,10 @@ function App() {
           <Route path='/profile' Component={UserProfile}></Route>
           <Route path='/orderConfirmation' Component={OrderConfirmation}></Route>
         </Routes>
+       </CartItemsContext>
         </ProductContext>
         </ListingsContext> 
-        </UserSessionData.Provider>
+        </AuthContext>
   );
 }
 
