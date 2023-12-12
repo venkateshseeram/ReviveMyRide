@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { setDoc , doc, Timestamp, getDocs, collection, writeBatch} from 'firebase/firestore'
 
 function Checkout() {
-    const {cartItems, setCartItems} = useContext(CartContext)
+    const {cartItems, setCartItems, cartLength, setCartLength} = useContext(CartContext);
     const {user, setUser} = useContext(UserSessionData)
     const navigate = useNavigate()
     let [cartPrice, setCartPrice] = useState(0)
@@ -25,23 +25,24 @@ function Checkout() {
   useEffect(()=>{
     onAuthStateChanged(auth,(user)=>{
       setUser(user)
-      retreiveCartProducts(user)
+      console.log(user)
     })
     if(user === null){
       navigate('/login')
     }
     else{
+      retreiveCartProducts()
       if(cartItems.length > 0) {
         cartPrice = cartItems.reduce((accumulator, currentValue)=>{return accumulator + currentValue.TotalProductPrice},0)
         setCartPrice(cartPrice)
       }
      
     }
-  },[setUser])
+  },[])
 
 
 /* -----------Call to retreive cart products to be displayed on checkout page-------*/
-  const retreiveCartProducts = async(user) =>{
+  const retreiveCartProducts = async() =>{
     cartProductsData = [];
     const querySnapshot = await getDocs(collection(textDB, "Cart "+ user.uid ));
 
@@ -89,6 +90,7 @@ function Checkout() {
         console.log("deleted the cart items")
       }).catch((error) => alert(error.message));
 
+    setCartLength(0);
       //Wait for 3 seconds before navigating to Order Confirmation Page
       setTimeout(()=>{
         navigate('/orderConfirmation')
@@ -156,12 +158,12 @@ function Checkout() {
         <header>Payment Information</header>
         <p style={{color:'red'}}>Balance Due : ${cartPrice}</p>
         <div className='payment-type'>
-          <header>Please select your prefered Payment Type:</header>
-          {
-            // <PaymentElement />
-          }
-         <button>Submit</button>
-         </div>
+        <header>Please select your prefered Payment Type:</header>
+        <fieldset className='inputData paymentInfo'>
+        <input type="radio" id="COD" name="payment" value='Cash On Delivery' onChange={(e)=> setPaymentType(e.target.value)} required/> Cash On Delivery
+        <input type="radio" id="Stripe" name="payment" value='Stripe' onChange={(e)=> setPaymentType(e.target.value)}/> Stripe Payment
+        </fieldset>
+       </div>
         </div>
       <div className="grid-item place-order">
        <Button variant='contained' color='success' size='medium' type='submit'>Place Your Order</Button>

@@ -19,20 +19,20 @@ function Cart() {
   const navigate = useNavigate()
   useEffect(()=>{
     onAuthStateChanged(auth,async(user)=>{
-      if(user){
-        setUser(user)
+      setUser(user)
+      if(user !== null){
         /*
   Retrieve all products associated with the cart + userID , to be used 
   */   
-      retreiveCartProducts(user)
+      retreiveCartProducts()
         }
       else
       navigate('/login')
   
       }) 
-  },[cartProductsData])
+  },[])
 
-  const retreiveCartProducts = async(user) =>{
+  const retreiveCartProducts = async() =>{
     cartProductsData = [];
     const querySnapshot = await getDocs(collection(textDB, "Cart "+ user.uid ));
 
@@ -47,7 +47,7 @@ function Cart() {
 
   const navigateToCheckout = async() =>{
     //get products when user clicks on checkout 
-    await retreiveCartProducts(user)
+    await retreiveCartProducts()
     navigate('/checkout')
   }
 
