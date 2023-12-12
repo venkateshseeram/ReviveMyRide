@@ -1,0 +1,29 @@
+name: Deploy to EC2
+
+on:
+  #schedule:
+    #- cron: "*/2 * * * *"
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          if [ ! -d \"node_modules\" ]; then
+            sudo apt update 
+            sudo apt -y install nodejs
+            node -v
+            sudo apt -y install npm
+          fi
+      - name: Check npm version
+        run: npm -v
+      - name: install babel
+        run: sudo npm install -g babel-cli
+      - name: Start the application
+        run: npm start
