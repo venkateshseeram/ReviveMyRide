@@ -9,7 +9,6 @@ import './Checkout.css'
 import { UserSessionData } from '../Context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { setDoc , doc, Timestamp, getDocs, collection, writeBatch} from 'firebase/firestore'
-import { PaymentElement } from '@stripe/react-stripe-js'
 
 function Checkout() {
     const {cartItems, setCartItems} = useContext(CartContext)
