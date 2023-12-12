@@ -1,0 +1,13 @@
+name: Self-hosted runner workflow
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: [self-hosted, EC2B]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run a script
+        run: |
+          echo Hello, world!
