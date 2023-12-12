@@ -1,4 +1,3 @@
-
 name: Deploy to EC2
 
 on:
@@ -28,5 +27,7 @@ jobs:
         run: npm -v
       - name: install babel
         run: sudo npm install -g babel-cli
+      - name: install react-scripts
+        run: npm install react-scripts | npm update
       - name: Start the application
         run: npm start
