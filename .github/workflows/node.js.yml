@@ -8,6 +8,7 @@ jobs:
   build:
 
     runs-on: [self-hosted, EC2B]
+    timeout-minutes: 30
 
     strategy:
       matrix:
