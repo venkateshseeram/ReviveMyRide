@@ -89,6 +89,8 @@ function PostAnAd() {
         {successMessage}
      </div>}
    <br/>
+   <br/>
+   <header>Post An Add</header>
     <form autoComplete='off' onSubmit={(e)=> handleSubmit(e)}>
      <input type='text' name='Name' value={name} placeholder='Product Name' onChange={(e)=> setName(e.target.value)} required />
      <div className='productCategory'>
