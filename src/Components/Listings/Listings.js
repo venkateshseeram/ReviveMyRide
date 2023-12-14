@@ -17,16 +17,20 @@ import { AllListingsContext } from '../Context/ListingsContext'
 import { CartContext } from '../Context/CartItemsContext'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../../config/firebase'
+import SearchBar from '../SearchBar/SearchBar'
 
 function Listings () {
   const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const { user, setUser } = useContext(UserSessionData)
-  const { allListings, setAllListings } = useContext(AllListingsContext)
   const [loading, setLoading] = useState(false)
   let { cartLength, setCartLength } = useContext(CartContext)
+  const { allListings, setAllListings } = useContext(AllListingsContext)
+  const [searchQuery, setSearchQuery] = useState('')
 
   let updatedProductData, updatedCartLength
+
+  /*--------Function to add products to cart and to cart DB in firestore----------*/
   const addToCart = async productData => {
     if (user) {
       updatedProductData = productData
@@ -48,9 +52,6 @@ function Listings () {
         doc(textDB, 'Cart ' + user.uid, updatedProductData.id),
         updatedProductData
       )
-
-      // const cartSnapshot = await getDocs(collection(textDB, 'Cart '+ user.uid));
-      // console.log(cartSnapshot.docs())
       const coll = collection(textDB, 'Cart ' + user.uid)
       const snapshot = await getAggregateFromServer(coll, {
         cartLength: sum('qty')
@@ -60,7 +61,9 @@ function Listings () {
     } else navigate('/login')
   }
 
+  /*--------Function to get products from firestore on page load----------*/
   const getProducts = async () => {
+    let products = []
     const querySnapshot = await getDocs(collection(textDB, 'ProductInfo'))
     querySnapshot.forEach(doc => {
       // doc.data() is never undefined for query doc snapshots
@@ -73,6 +76,16 @@ function Listings () {
     })
   }
 
+  /*--------Function to filter products----------*/
+  const filterProducts = (searchQuery, productData) => {
+    if (!searchQuery) return productData
+    else
+      return productData.filter(item =>
+        item.name.toLowerCase().includes(searchQuery)
+      )
+  }
+  const dataFiltered = filterProducts(searchQuery, allListings)
+
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       setUser(user)
@@ -80,18 +93,28 @@ function Listings () {
     setLoading(true)
     getProducts()
     setLoading(false)
-  }, [setUser, getProducts])
+  }, [setUser])
 
   return (
-    <div className='listings'>
-      {loading ? (
-        products.map(item => (
-          <Product key={item.id} product={item} addToCart={addToCart}></Product>
-        ))
-      ) : (
-        <div>Data is loading please wait</div>
-      )}
-    </div>
+    <>
+      <SearchBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      ></SearchBar>
+      <div className='listings'>
+        {loading ? (
+          dataFiltered.map(item => (
+            <Product
+              key={item.id}
+              product={item}
+              addToCart={addToCart}
+            ></Product>
+          ))
+        ) : (
+          <div>Data is loading please wait</div>
+        )}
+      </div>
+    </>
   )
 }
 

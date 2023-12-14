@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UserSessionData } from '../Context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
@@ -21,6 +21,7 @@ function Navbar () {
     })
   }, [])
 
+  /*--------Function to logout---------*/
   const logout = () => {
     signOut(auth)
       .then(() => {
