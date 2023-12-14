@@ -30,3 +30,6 @@ jobs:
       run: npm run build
       env:
         NODE_ENV: development
+    - name: Serve
+      run: nohup npm install -g serve && serve -s build &
+
