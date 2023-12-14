@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 
 function Product ({ product, addToCart }) {
   const { setIndividualProduct } = useContext(IndividualProductContext)
+
   const [addedToCart, setAddedToCart] = useState('Add to Cart')
 
   const handleAddToCart = () => {

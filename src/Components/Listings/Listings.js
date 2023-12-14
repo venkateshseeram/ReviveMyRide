@@ -30,7 +30,7 @@ function Listings () {
 
   let updatedProductData, updatedCartLength
 
-  /--------Function to add products to cart and to cart DB in firestore----------/
+  /*--------Function to add products to cart and to cart DB in firestore----------*/
   const addToCart = async productData => {
     if (user) {
       updatedProductData = productData
@@ -63,7 +63,7 @@ function Listings () {
     navigate('/login')
   }
 
-  /--------Function to get products from firestore on page load----------/
+  /*--------Function to get products from firestore on page load----------*/
   const getProducts = async () => {
     let products = []
     const querySnapshot = await getDocs(collection(textDB, 'ProductInfo'))
@@ -78,7 +78,7 @@ function Listings () {
     })
   }
 
-  /--------Function to filter products----------/
+  /*--------Function to filter products----------*/
   const filterProducts = (searchQuery, productData) => {
     if (!searchQuery) return productData
     else
