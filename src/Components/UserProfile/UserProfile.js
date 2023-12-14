@@ -1,4 +1,19 @@
-import React, { useEffect, useContext, useState } from 'react'
+[5:28 PM, 12/14/2023] Minni: import React, { useContext, useEffect, useState } from 'react'
+import {
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+  getDoc,
+  getAggregateFromServer,
+  sum
+} from 'firebase/firestore'
+import Product from '../../pages/Product'
+import '../Listings/Listings.css'
+import { textDB } from '../../config/firebase'
+import { UserSessionData } from '../Context/AuthContext'
+import { useNavigate } from 'react…
+[5:29 PM, 12/14/2023] Minni: UserProfile.js:                                                                                                                                                                                                                                                                                import React, { useEffect, useContext, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
 import { UserSessionData } from '../Context/AuthContext'
@@ -14,7 +29,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 function UserProfile () {
   const [expanded, setExpanded] = useState(false)
   const [loading, setLoading] = useState(false)
-  let ordersData = []
+  let [ordersData, setOrdersData] = useState([])
   let { user, setUser } = useContext(UserSessionData)
 
   const handleChange = panel => (event, isExpanded) => {
@@ -29,6 +44,7 @@ function UserProfile () {
   }, [setUser])
 
   const getOrdersData = async () => {
+    let updatedOrderData = []
     try {
       //get latest doc from the orders and for the order + user.uid i.e. 1st doc when sorted by desc order
       setLoading(true)
@@ -36,8 +52,10 @@ function UserProfile () {
       const q = query(ordersRef, orderBy('OrderCreationDate', 'desc'), limit(5))
       let orderDataSnapshot = await getDocs(q)
       orderDataSnapshot.forEach(order => {
-        ordersData.push(order.data().Products)
+        updatedOrderData.push(order.data().Products)
       })
+      setOrdersData(updatedOrderData)
+      console.log(ordersData)
     } catch {
       console.log('errorrr')
     }
@@ -85,32 +103,39 @@ function UserProfile () {
           </AccordionSummary>
           <AccordionDetails>
             <header>My Recent Orders</header>
-            {
-              //   loading ? (
-              //   ordersData.length > 0 ? (
-              //     ordersData.map(orders =>
-              //       orders.map(order => {
-              //         <div className='cartItemContainer' key={order.id}>
-              //           <div id='cartItemImage'>
-              //             <img src={order.image} alt={order.description} />
-              //           </div>
-              //           <div className='cartItemDetails'>
-              //             <div id='cartItemName'>{order.name}</div>
-              //             <div id='cartItemQP'>
-              //               <div id='cartItemQty'>Qty: {order.qty}</div>
-              //               <div id='cartItemPrice'>${order.price}</div>
-              //             </div>
-              //           </div>
-              //         </div>
-              //       })
-              //     )
-              //   ) : (
-              //     <div> !!No products to be displayed!!</div>
-              //   )
-              // ) : (
-              //   <div> Data is loading.... please wait</div>
-              // )
-            }
+            {loading ? (
+                ordersData.length > 0 ?
+                ( Object.keys(ordersData).map((key) => {
+                return (
+                  <div key={key} style={{'border':'0.1vw solid gray', margin:'3vh', boxShadow:'1px 2px 4px rgba(0,0,0,0.8'}}>
+                     {ordersData[key].map((cartItem) => {
+                       return (
+                        <>
+                        <div className='cartItemContainer' key={cartItem.id}>
+                        <div id='cartItemImage'>
+                          <img src={cartItem.image} alt={cartItem.image} />
+                        </div>
+                        <div className='cartItemDetails'>
+                          <div id='cartItemName'>{cartItem.name}</div>
+                          <div id='cartItemQP'>
+                            <div id='cartItemQty'>Qty: {cartItem.qty}</div>
+                            <div id='cartItemPrice'>${cartItem.price}</div>
+                          </div>
+                        </div>
+                      </div>
+                      </>
+                       )
+                      })}
+                  </div>
+                )
+              }))
+            :
+            (<div style={{textAlign:'center'}}> You have no recent orders </div>)
+  )
+          : (
+              <div style={{textAlign:'center'}}>...Data is loading.. please wait...</div>
+            )}
+                 
           </AccordionDetails>
         </Accordion>
       </div>
