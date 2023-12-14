@@ -1,85 +1,96 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { collection, getDocs, setDoc, doc, getDoc , getAggregateFromServer,sum} from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+  getDoc,
+  getAggregateFromServer,
+  sum
+} from 'firebase/firestore'
 import Product from '../../pages/Product'
 import '../Listings/Listings.css'
 import { textDB } from '../../config/firebase'
 import { UserSessionData } from '../Context/AuthContext'
-import { useNavigate } from 'react-router-dom';
-import {AllListingsContext} from '../Context/ListingsContext';
-import { CartContext } from '../Context/CartItemsContext';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../config/firebase';
+import { useNavigate } from 'react-router-dom'
+import { AllListingsContext } from '../Context/ListingsContext'
+import { CartContext } from '../Context/CartItemsContext'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '../../config/firebase'
 
-function Listings() {
-    const navigate = useNavigate()
-    const [products, setProducts] = useState([]);
-    const {user, setUser} = useContext(UserSessionData)
-    const {allListings, setAllListings} = useContext(AllListingsContext)
-    const [loading, setLoading] = useState(false);
-   let {cartLength, setCartLength} = useContext(CartContext);
+function Listings () {
+  const navigate = useNavigate()
+  const [products, setProducts] = useState([])
+  const { user, setUser } = useContext(UserSessionData)
+  const { allListings, setAllListings } = useContext(AllListingsContext)
+  const [loading, setLoading] = useState(false)
+  let { cartLength, setCartLength } = useContext(CartContext)
 
-    let updatedProductData, updatedCartLength;
-    const addToCart= async(productData)=>{
-
-      if(user){
-        updatedProductData = productData;
-        //getDoc
-        const docSnap= await getDoc(doc(textDB, 'Cart '+ user.uid, productData.id)) 
-        //if docSnap exists, then qty + 1 else qty = 1
-        if(docSnap.exists()){
-          updatedProductData.qty = docSnap.data().qty + 1;
-        }
-        else{
-        updatedProductData.qty = 1;
-        }
-        //set or update data regardless
-      updatedProductData.TotalProductPrice = updatedProductData.qty *updatedProductData.price;
+  let updatedProductData, updatedCartLength
+  const addToCart = async productData => {
+    if (user) {
+      updatedProductData = productData
+      //getDoc
+      const docSnap = await getDoc(
+        doc(textDB, 'Cart ' + user.uid, productData.id)
+      )
+      //if docSnap exists, then qty + 1 else qty = 1
+      if (docSnap.exists()) {
+        updatedProductData.qty = docSnap.data().qty + 1
+      } else {
+        updatedProductData.qty = 1
+      }
+      //set or update data regardless
+      updatedProductData.TotalProductPrice =
+        updatedProductData.qty * updatedProductData.price
       //Add data to the cart and cart data to firebase to persist through out the pages or user session
-      await setDoc(doc(textDB, 'Cart ' + user.uid, updatedProductData.id), updatedProductData);
+      await setDoc(
+        doc(textDB, 'Cart ' + user.uid, updatedProductData.id),
+        updatedProductData
+      )
 
       // const cartSnapshot = await getDocs(collection(textDB, 'Cart '+ user.uid));
       // console.log(cartSnapshot.docs())
-      const coll = collection(textDB, 'Cart '+ user.uid);
+      const coll = collection(textDB, 'Cart ' + user.uid)
       const snapshot = await getAggregateFromServer(coll, {
-              cartLength: sum('qty')
-      });
+        cartLength: sum('qty')
+      })
       setCartLength(snapshot.data().cartLength)
-      console.log('totalPopulation: ', snapshot.data().cartLength);
+      console.log('totalPopulation: ', snapshot.data().cartLength)
+    } else navigate('/login')
+  }
 
-      }
-    else
-      navigate('/login') 
-    }
-  
-    const getProducts = async()=>{
-      const querySnapshot = await getDocs(collection(textDB, "ProductInfo"));
-     querySnapshot.forEach((doc) => {
-     // doc.data() is never undefined for query doc snapshots
-     products.push({...doc.data()})
-      if(products.length === querySnapshot.docs.length){
-        setProducts(products);
+  const getProducts = async () => {
+    const querySnapshot = await getDocs(collection(textDB, 'ProductInfo'))
+    querySnapshot.forEach(doc => {
+      // doc.data() is never undefined for query doc snapshots
+      products.push({ ...doc.data() })
+      if (products.length === querySnapshot.docs.length) {
+        setProducts(products)
         setAllListings(products)
         setLoading(true)
       }
-     });
-    }
+    })
+  }
 
-    useEffect(()=>{
-      onAuthStateChanged(auth,(user)=>{
-        setUser(user)
-      })
-      setLoading(true)
-      getProducts();
-      setLoading(false)
-    },[])
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      setUser(user)
+    })
+    setLoading(true)
+    getProducts()
+    setLoading(false)
+  }, [setUser, getProducts])
 
   return (
     <div className='listings'>
-        { loading?
-       products.map((item)=> <Product key={item.id} product={item} addToCart={addToCart}></Product>
-       ) 
-       : <div>Data is loading please wait</div>
-    }
+      {loading ? (
+        products.map(item => (
+          <Product key={item.id} product={item} addToCart={addToCart}></Product>
+        ))
+      ) : (
+        <div>Data is loading please wait</div>
+      )}
     </div>
   )
 }
