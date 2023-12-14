@@ -61,6 +61,7 @@ function Listings () {
   }
 
   const getProducts = async () => {
+    let products = []
     const querySnapshot = await getDocs(collection(textDB, 'ProductInfo'))
     querySnapshot.forEach(doc => {
       // doc.data() is never undefined for query doc snapshots
@@ -80,7 +81,7 @@ function Listings () {
     setLoading(true)
     getProducts()
     setLoading(false)
-  }, [setUser, getProducts])
+  }, [setUser])
 
   return (
     <div className='listings'>
