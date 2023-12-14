@@ -32,6 +32,7 @@ nav .non-logo-links{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
 }
 
 nav .non-logo-links div{
