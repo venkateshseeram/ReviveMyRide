@@ -30,7 +30,7 @@ function Listings () {
 
   let updatedProductData, updatedCartLength
 
-  /*--------Function to add products to cart and to cart DB in firestore----------*/
+  /--------Function to add products to cart and to cart DB in firestore----------/
   const addToCart = async productData => {
     if (user) {
       updatedProductData = productData
@@ -58,10 +58,12 @@ function Listings () {
       })
       setCartLength(snapshot.data().cartLength)
       console.log('totalPopulation: ', snapshot.data().cartLength)
-    } else navigate('/login')
+    } 
+    else 
+    navigate('/login')
   }
 
-  /*--------Function to get products from firestore on page load----------*/
+  /--------Function to get products from firestore on page load----------/
   const getProducts = async () => {
     let products = []
     const querySnapshot = await getDocs(collection(textDB, 'ProductInfo'))
@@ -76,7 +78,7 @@ function Listings () {
     })
   }
 
-  /*--------Function to filter products----------*/
+  /--------Function to filter products----------/
   const filterProducts = (searchQuery, productData) => {
     if (!searchQuery) return productData
     else
@@ -101,6 +103,7 @@ function Listings () {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       ></SearchBar>
+
       <div className='listings'>
         {loading ? (
           dataFiltered.map(item => (
@@ -114,6 +117,7 @@ function Listings () {
           <div>Data is loading please wait</div>
         )}
       </div>
+
     </>
   )
 }

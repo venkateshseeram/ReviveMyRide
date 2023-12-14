@@ -154,10 +154,10 @@ function Checkout () {
                   </div>
                 ))
               ) : (
-                <div> !!No products to be displayed!!</div>
+                <div style={{textAlign:'center'}}> !!No products to be displayed!!</div>
               )
             ) : (
-              <div>...Data is loading.. please wait...</div>
+              <div style={{textAlign:'center'}}>...Data is loading.. please wait...</div>
             )}
 
             <div className='edit-order' style={{ padding: '1vw' }}>
@@ -177,7 +177,6 @@ function Checkout () {
             <header>Payment Information</header>
             <p style={{ color: 'red' }}>Balance Due : ${cartPrice}</p>
             <div className='payment-type'>
-              <header>Please select your prefered Payment Type:</header>
               {clientSecret && (
                 <EmbeddedCheckoutProvider
                   stripe={stripePromise}
