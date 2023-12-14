@@ -1,19 +1,4 @@
-[5:28 PM, 12/14/2023] Minni: import React, { useContext, useEffect, useState } from 'react'
-import {
-  collection,
-  getDocs,
-  setDoc,
-  doc,
-  getDoc,
-  getAggregateFromServer,
-  sum
-} from 'firebase/firestore'
-import Product from '../../pages/Product'
-import '../Listings/Listings.css'
-import { textDB } from '../../config/firebase'
-import { UserSessionData } from '../Context/AuthContext'
-import { useNavigate } from 'react…
-[5:29 PM, 12/14/2023] Minni: UserProfile.js:                                                                                                                                                                                                                                                                                import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
 import { UserSessionData } from '../Context/AuthContext'
