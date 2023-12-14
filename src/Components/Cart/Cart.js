@@ -15,7 +15,7 @@ function Cart() {
   const {user,setUser} = useContext(UserSessionData)
   let [cartProductsData, setCartProductsData] = useState([])
   const [loading, setLoading] = useState(false)
-  const {cartItems,setCartItems} = useContext(CartContext)
+  const {cartItems,setCartItems,cartLength} = useContext(CartContext)
   const navigate = useNavigate()
   useEffect(()=>{
     onAuthStateChanged(auth,async(user)=>{
@@ -55,7 +55,7 @@ function Cart() {
     <>
     <Navbar></Navbar>
      <div className='cartProductParentDiv'>
-     { cartItems.length > 0 && <Button id='continueToCheckout' color='success' variant='contained' onClick={navigateToCheckout}>Continue to Checkout</Button>}
+     { cartLength > 0 && <Button id='continueToCheckout' color='success' variant='contained' onClick={navigateToCheckout}>Continue to Checkout</Button>}
      {loading? (
       <div className='cartProducts'>
       {

@@ -69,7 +69,7 @@ function PostAnAd () {
               setId('')
               setCategory('')
               setDescription('')
-              document.getElementById('file').value = ''
+              document.getElementById('product_image').value = ''
               setUploadError('')
               setImageError('')
               setTimeout(() => {
@@ -94,7 +94,7 @@ function PostAnAd () {
         )}
         <br />
         <br />
-        <header>Post An Add</header>
+        <header>Post An Advertisment</header>
         <form autoComplete='off' onSubmit={e => handleSubmit(e)}>
           <input
             type='text'
