@@ -130,7 +130,11 @@ function Checkout () {
       <Navbar></Navbar>
       <div className='grid-container'>
         <h1>CHECKOUT</h1>
-        <form className='payment-form' onSubmit={e => handlePlaceOrder(e)}>
+        <form
+          className='payment-form'
+          onSubmit={e => handlePlaceOrder(e)}
+          autoComplete='off'
+        >
           <div className='grid-item order-summary'>
             <header>Order Summary</header>
             {loading ? (
